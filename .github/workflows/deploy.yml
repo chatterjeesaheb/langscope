@@ -15,36 +15,38 @@ jobs:
     # Skip deployment for now - set to false to disable
     if: false
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Generate Prisma Client
-        run: npm run db:generate
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-
-      - name: Run database migrations
-        run: npm run db:migrate
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        # Only run migrations if DATABASE_URL is set
-        continue-on-error: false
-
-      - name: Build Next.js application
-        run: npm run build
-        env:
-          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
-          NEXT_PUBLIC_WS_URL: ${{ secrets.NEXT_PUBLIC_WS_URL }}
-
+      - name: Deployment disabled
+        run: echo "Deployment is currently disabled. Set 'if: false' to 'if: true' or remove the condition to enable."
+      
+      # When deployment is enabled, uncomment the steps below:
+      # - name: Checkout code
+      #   uses: actions/checkout@v4
+      #
+      # - name: Setup Node.js
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: '20'
+      #     cache: 'npm'
+      #
+      # - name: Install dependencies
+      #   run: npm ci
+      #
+      # - name: Generate Prisma Client
+      #   run: npm run db:generate
+      #   env:
+      #     DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      #
+      # - name: Run database migrations
+      #   run: npm run db:migrate
+      #   env:
+      #     DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      #
+      # - name: Build Next.js application
+      #   run: npm run build
+      #   env:
+      #     NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+      #     NEXT_PUBLIC_WS_URL: ${{ secrets.NEXT_PUBLIC_WS_URL }}
+      #
       # Example: Deploy to Vercel
       # - name: Deploy to Vercel
       #   uses: amondnet/vercel-action@v25
@@ -53,7 +55,7 @@ jobs:
       #     vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
       #     vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
       #     vercel-args: '--prod'
-
+      #
       # Example: Deploy to AWS
       # - name: Configure AWS credentials
       #   uses: aws-actions/configure-aws-credentials@v4
@@ -61,7 +63,4 @@ jobs:
       #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
       #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       #     aws-region: us-east-1
-
-      - name: Deployment placeholder
-        run: echo "Configure your deployment target here"
 
