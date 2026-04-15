@@ -1,0 +1,18 @@
+FROM python:3.10-slim
+ENV PYTHONUNBUFFERED=1 
+WORKDIR /app
+
+# NEW: Install OS-level MIME types so Python's mimetypes library works dynamically
+RUN apt-get update && \
+    (apt-get install -y media-types || apt-get install -y mime-support) && \
+    rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY mcp_search_server.py .
+
+EXPOSE 8000
+
+# This tells Uvicorn to trust Azure's proxy and accept the public FQDN Host header.
+CMD ["uvicorn", "mcp_search_server:app", "--host", "0.0.0.0", "--port", "8000", "--proxy-headers", "--forwarded-allow-ips=*"]

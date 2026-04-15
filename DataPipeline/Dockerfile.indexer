@@ -1,0 +1,13 @@
+FROM python:3.10-slim
+ENV PYTHONUNBUFFERED=1 
+WORKDIR /app
+
+RUN apt-get update && \
+    (apt-get install -y media-types || apt-get install -y mime-support) && \
+    apt-get install -y curl && \
+    rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY dynamic_observer_indexer.py .
+CMD ["python", "dynamic_observer_indexer.py"]
